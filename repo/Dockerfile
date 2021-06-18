@@ -1,7 +1,7 @@
 FROM httpd:2.4.48
 
 # install required packages
-RUN apt-get update && apt-get install -y wget procps
+RUN apt-get update && apt-get install -y wget
 
 # copy scripts
 RUN echo "**** Copy scripts"

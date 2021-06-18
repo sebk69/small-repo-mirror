@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cd /root
 
 # launch repo refresh async
