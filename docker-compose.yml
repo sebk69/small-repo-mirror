@@ -2,6 +2,9 @@ version: "3"
 
 services:
   repo:
+    container_name: repo
     build: repo
-  ubuntu:
-    build: ubuntu
+    ports:
+      - 7000:80
+    volumes:
+      - ./old-releases.ubuntu.com:/root/old-releases.ubuntu.com

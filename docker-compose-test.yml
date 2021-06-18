@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  ubuntu:
+    platform: linux/amd64
+    container_name: test
+    build: test
