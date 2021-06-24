@@ -9,25 +9,45 @@ while [ 1 ]; do
   # only if not downloaded before : unmaintained repos is static - it is recommended to have persistent volume on /root/archive.ubuntu.com
   [ -f /root/old-releases.ubuntu.com/done ] && echo "already downloaded" || \
       cd /root && \
-      wget \
+      while true; do wget \
+         --continue \
          --mirror \
          --no-verbose \
          --no-parent \
-         --tries=0 \
-         --timeout=0 \
-         --timestamping \
          --exclude-directories=/old-images/ubuntu/.temp \
+         --reject "current" \
+         --reject "pxelinux.cfg" \
          ftp://old-releases.ubuntu.com/old-images/ubuntu && \
-      touch /root/old-releases.ubuntu.com/done
+      touch /root/old-releases.ubuntu.com/done && break; done
   # fusion to maintened ubuntu repo in order to serve all dist in one place
   echo "syncing"
   cd /root/old-releases.ubuntu.com/old-images && rsync -rt ubuntu /root/archive.ubuntu.com
 
   echo "**** Mirror maintained ubutnu releases"
-  cd /root && wget --mirror --no-verbose --no-parent --tries=0 --timeout=0 --timestamping ftp://archive.ubuntu.com/ubuntu/ &
+  cd /root && \
+      while true; do wget \
+         --continue \
+         --mirror \
+         --no-verbose \
+         --no-parent \
+         --exclude-directories=/ubuntu/.temp \
+         --reject "current" \
+         --reject "pxelinux.cfg" \
+         ftp://archive.ubuntu.com/ubuntu/ && \
+      break; done &
 
   echo "**** Mirror debian releases"
-  cd /root && wget --mirror --no-verbose --no-parent --tries=0 --timeout=0 --timestamping ftp://deb.debian.org/debian/ &
+  cd /root && \
+      while true; do wget \
+         --continue \
+         --mirror \
+         --no-verbose \
+         --no-parent \
+         --exclude-directories=/ubuntu/.temp \
+         --reject "current" \
+         --reject "pxelinux.cfg" \
+         ftp://deb.debian.org/debian/ && \
+      break; done &
 
   wait
 
